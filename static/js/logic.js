@@ -16,7 +16,27 @@ function createMap(earthquakeMarkers) {
 
         streetmap.addTo(myMap);
         earthquakeMarkers.addTo(myMap);
+
+        // Create a legend
+        let legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = function (map) {
+            let div = L.DomUtil.create('div', 'legend');
+            const colors = ['lightgreen', 'yellow', 'orange', 'red'];
+            const depths = [0, 2, 3, 5];
+
+            for (let i = 0; i < colors.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + colors[i] + '"></i> ' +
+                    (i === colors.length - 1 ? depths[i] + '+' : depths[i] + '–' + depths[i + 1]) + '<br>';
+            }
+            return div;
+        };
+
+        legend.addTo(myMap);
+
 }
+
 //------------------------------------------------------------------------------------------------------------
 function createMarkers(response) {
     let features = response.features;
@@ -60,13 +80,12 @@ function onEachFeature(feature, layer) {
 //Perform and API call to get the earthquake data. Call createMarkers when it completes
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(createMarkers);
 
-
-//Function to deetermine marker color based on depth
+//Function to determine marker color based on depth
 function getColor(depth) {
     const colors = ['lightgreen', 'yellow', 'orange', 'red'];
-    if (depth < 10) return colors[0];
-    if (depth < 30) return colors[1];
-    if (depth < 70) return colors[2];
+    if (depth < 2) return colors[0];  //10
+    if (depth < 3) return colors[1];  //30
+    if (depth < 5) return colors[2];  //70
     return colors[3];
 };
 
