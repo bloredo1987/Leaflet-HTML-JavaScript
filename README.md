@@ -1,20 +1,15 @@
 # Leaflet-HTML-JavaScript
 
--For this project, I built an interactive bashboard to explore the Belly Button Biodiversity dataset, which catalogs the microbes that colonize human navels.
+-For this project, I built an visualization tool that would show earthquake date in an interactive way. This data comes from the United States Geological Survey, or USGS for short, which is responsible for providing scientific data about natural hazards, the health of our ecosystems and environment, and the impacts of climate and land-use change. 
 
 -Highlights of work Done:  
 
-- Use the D3 library to read in samples.json from the URL https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json.
+- Get data from teh USGS GeoJSON Feed page and choose a dataset to visualize.
 
-- Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
+- Use the URL of this JSON to pull in the data for the visualization.
 
-- Create a bubble chart that displays each sample.
+- Import and visualize th edata using Leaflet to create a map that plots all the earthquakes from the dataset based on their longitude and latitude.
 
-- Display the sample metadata, i.e., an individual's demographic information.
+- Include popups that provide additinoal information and the earthquake when its associated marker is clicked.
 
-- Display each key-value pair from the metadata JSON object somewhere on the page.
-
-- Deploy my app to a free static page hosting service(GitHub Pages).
-
-
--In conclusion, the dataset reveals that a small handful of microbial species (also called operational taxonomic units, or OTUs, in the study) were present in more than 70% of people, while the rest were relatively rare.
+-Create a legend that will provide context for the map data.
