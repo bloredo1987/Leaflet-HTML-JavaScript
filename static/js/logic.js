@@ -6,67 +6,53 @@ function createMap(earthquakeMarkers) {
         // Create the tile layer
         let streetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        });//.addTo(myMap);
-
-        // //baseMaps object to hold the streetmap layer
-        // let baseMaps = {
-        //     "Street Map": streetmap
-        // };
-
-        // //overlayMaps object to hold the earthquakeMarkers layer
-        // let overlayMaps = {
-        //     "Earthquakes" : earthquakeMarkers
-        // };
+        });
 
         //map object with options
-        let myMap = L.map("map", {   //"map-id" ???????
+        let myMap = L.map("map", { 
             center: [0, 0],
             zoom: 2,
-            // layers : [streetmap, earthquakeMarkers]
         });
+
         streetmap.addTo(myMap);
         earthquakeMarkers.addTo(myMap);
-        //Create a layer control, and pass it throguh baseMaps/overlayMaps. Add the layer control to the map
-        // L.control.layers(baseMaps, overlayMaps, {
-        //     collapsed: false
-        // }).addTo(myMap);
 }
 //------------------------------------------------------------------------------------------------------------
 function createMarkers(response) {
-    //Pull the "features" property from response
     let features = response.features;
-    // console.log(features);
-    
-    //Initialize an array to hold the earthquake markers
+    console.log(features);
+
+    // Create a layer group to hold the earthquake markers
     let earthquakeMarkers = [];
-    let earthquakeMarker = [];
+    
+    // Loop through the features array
+    for (let i = 0; i < features.length; i++) {
+        let earthquake = features[i];
+        let { coordinates } = earthquake.geometry;
+        let [longitude, latitude] = coordinates;
+        
+        let mag = earthquake.properties.mag; // Get the magnitude from properties
+        
+        // Customize marker size and color based on magnitude
+        let radius = mag * 5;  // Adjust the multiplier to set the radius based on magnitude
+        let color = getColor(mag);  // Use your getColor function to determine the color
+        
+        let earthquakeMarker = L.circleMarker([latitude, longitude], {
+            radius: radius,
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.7
+        }).bindPopup(`<strong>Magnitude: ${mag}<br>Place: ${earthquake.properties.place}</strong>`);
+        
+        earthquakeMarkers.push(earthquakeMarker);
+    }
 
-    //Loop throough the features array
-    // for (let i=0; i < features.length; i++) {
-    //     let earthquake = features[i];
-    //     let { coordinates, mag } = earthquake.geometry;
-    //     let [longitude, latitude, depth] = coordinates;
-     
-    // }
+    // Create a layer group that's made from the earthquake markers array, and pass it to the createMap function
+    createMap(L.layerGroup(earthquakeMarkers));
+}
 
-    //Create a layer group that's made from the earthquake markers array, and pass it to the createMap function
-    createMap(
-        // L.layerGroup(
-            L.geoJson(response, {
-            onEachFeature: onEachFeature, 
-            style: {radius: 10,
-                    // color: getColor(features.properties.mag),
-                    // fillColor: getColor(features.properties.mag),
-                    fillOpacity: 0.7},
-            
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng);
-            }}));
-
-};
 //------------------------------------------------------------------------------------------------------------
 function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
     layer.bindPopup(`<strong>Magnitude: ${feature.properties.mag}<br> Place: ${feature.properties.place}</strong>` );
 };
 
