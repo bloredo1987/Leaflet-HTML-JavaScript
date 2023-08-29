@@ -13,3 +13,5 @@
 - Include popups that provide additinoal information and the earthquake when its associated marker is clicked.
 
 -Create a legend that will provide context for the map data.
+
+-Website: https://bloredo1987.github.io/Leaflet-HTML-JavaScript/
